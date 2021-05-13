@@ -88,6 +88,8 @@ AppPackages/
 
 # Others
 appsettings.json
+.vs/*
+*.testlog
 sql/
 *.Cache
 ClientBin/
