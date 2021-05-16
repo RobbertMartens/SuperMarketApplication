@@ -24,7 +24,7 @@ namespace Service.UnitTests
             var product = new Product() { ProductName = "Kaaaas", Price = 5.49M, Discount = Discount.NoDiscount };
 
             // Act
-            var price = _calculateProductPrice.Calculate(product);
+            var price = _calculateProductPrice.Calculate(product, 1);
 
             // Assert
             Assert.AreEqual(product.Price, price);
@@ -37,10 +37,10 @@ namespace Service.UnitTests
             var product = new Product() { ProductName = "Kaaaas", Price = 5.49M, Discount = Discount.Bonus };
 
             // Assign
-            var expectedPrice = product.Price * Constants.BonusDiscount;
+            var expectedPrice = 4.39M;
 
             // Act
-            var price = _calculateProductPrice.Calculate(product);
+            var price = _calculateProductPrice.Calculate(product, 1);
 
             // Assert
             Assert.AreEqual(expectedPrice, price);
@@ -53,10 +53,10 @@ namespace Service.UnitTests
             var product = new Product() { ProductName = "Kaaaas", Price = 5.49M, Discount = Discount.Expiry };
 
             // Assign
-            var expectedPrice = product.Price * Constants.ExpiryDiscount;
+            var expectedPrice = 3.57M;
 
             // Act
-            var price = _calculateProductPrice.Calculate(product);
+            var price = _calculateProductPrice.Calculate(product, 1);
 
             // Assert
             Assert.AreEqual(expectedPrice, price);
@@ -67,7 +67,7 @@ namespace Service.UnitTests
         {
             Exception ex = Assert.Throws<NullReferenceException>(delegate
             {
-                _calculateProductPrice.Calculate(null);
+                _calculateProductPrice.Calculate(null, 1);
             });
             Assert.AreEqual("given product is null!", ex.Message.ToLower());
         }
