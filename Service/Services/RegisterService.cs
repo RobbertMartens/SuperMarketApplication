@@ -1,23 +1,30 @@
 ﻿using Service.Interfaces;
 using Service.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace Service.Services
 {
     public class RegisterService : IRegisterService
     {
         private readonly IReceiptService _receiptService;
+        private readonly IProductService _productService;
 
-        public RegisterService(IReceiptService calculatePriceService)
+        public RegisterService(IReceiptService calculatePriceService, IProductService productService)
         {
             _receiptService = calculatePriceService;
+            _productService = productService;
         }
 
-        public string CheckOut(Cart cart)
+        public async Task<string> CheckOut(Cart cart)
         {
             var receipt = _receiptService.CreateReceipt(cart);
             var text = _receiptService.PrintReceipt(receipt);
-            // Decrease Product amounts
+            
+            foreach (var product in receipt.BoughtProducts)
+            {
+                await _productService.DecreaseProductAmount(product.Barcode, product.Amount);
+            }
             Console.WriteLine(receipt);
             return text;
         }

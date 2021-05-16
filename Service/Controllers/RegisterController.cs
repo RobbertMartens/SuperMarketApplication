@@ -27,7 +27,7 @@ namespace Service.Controllers
         {
             if (cart == null || cart.Products == null) { return BadRequest(); }
 
-            var printedReceipt = _registerService.CheckOut(cart);
+            var printedReceipt = await _registerService.CheckOut(cart);
 
             return new OkObjectResult(printedReceipt);
         }

@@ -1,9 +1,10 @@
 ﻿using Service.Models;
+using System.Threading.Tasks;
 
 namespace Service.Interfaces
 {
     public interface IRegisterService
     {
-        string CheckOut(Cart cart);
+        Task<string> CheckOut(Cart cart);
     }
 }
