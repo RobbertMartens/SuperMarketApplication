@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 using Service.Interfaces;
 using Service.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Service.Controllers
@@ -27,9 +25,15 @@ namespace Service.Controllers
         {
             if (cart == null || cart.Products == null) { return BadRequest(); }
 
-            var printedReceipt = await _registerService.CheckOut(cart);
-
-            return new OkObjectResult(printedReceipt);
+            try
+            {
+                var printedReceipt = await _registerService.CheckOut(cart);
+                return new OkObjectResult(printedReceipt);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }            
         }
     }
 }
