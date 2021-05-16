@@ -68,11 +68,11 @@ namespace Service.Services
         {
             if (product.Discount == Discount.NoDiscount)
             {
-                return "           ";
+                return "";
             }
             else
             {
-                return $"-{product.ProductPrice - product.ProductPriceWithDiscount}  ";
+                return $"-{(product.Amount * product.ProductPrice) - (product.Amount * product.ProductPriceWithDiscount)}  ";
             }
         }
     }
