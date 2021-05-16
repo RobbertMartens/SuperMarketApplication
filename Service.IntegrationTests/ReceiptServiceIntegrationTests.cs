@@ -18,7 +18,6 @@ namespace Service.IntegrationTests
             _cart.AddToCart(new Product { ProductName = "Melk", Barcode = 378941, Price = 0.99M, Amount = 1 });
             _cart.AddToCart(new Product { ProductName = "Pizza", Barcode = 739214, Price = 4.59M, Amount = 1 });
             _cart.AddToCart(new Product { ProductName = "WC papier", Barcode = 798234, Price = 1.12M, Amount = 1 });
-            System.Console.WriteLine(JsonConvert.SerializeObject(_cart, Formatting.Indented));
         }
 
         [Test]
@@ -95,29 +94,6 @@ namespace Service.IntegrationTests
                 Assert.AreEqual(expectedDiscountPrice, receipt.BoughtProducts[0].ProductPriceWithDiscount);
                 Assert.AreEqual(expectedTotal, receipt.BoughtProducts[0].Total);
             });
-        }
-
-        [Test]
-        public void PrintReceipt_MultipleProducts_ShouldReturnPrintedReceipt()
-        {
-            // Assemble
-            _cart.Products[0].Discount = Discount.Bonus;
-            _cart.Products[2].Discount = Discount.Expiry;
-            _cart.Products[4].Discount = Discount.Bonus;
-
-            _cart.Products[0].Amount = 3;
-            _cart.Products[2].Amount = 2;
-            _cart.Products[4].Amount = 3;
-
-            var receipt = ReceiptService.CreateReceipt(_cart);
-
-            // Act
-            var printedReceipt = ReceiptService.PrintReceipt(receipt);
-
-            System.Console.WriteLine(printedReceipt);
-
-            // Assert
-
         }
     }
 }

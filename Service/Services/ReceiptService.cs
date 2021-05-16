@@ -8,6 +8,7 @@ namespace Service.Services
 {
     public class ReceiptService : IReceiptService
     {
+        private const string _format = "{0, -25}{1, -10}{2, 15}{3, 15}{4, 15}";
         private readonly ICalculateProductPrice _calculateProductPrice;
 
         public ReceiptService(ICalculateProductPrice calculateProductPrice)
@@ -45,16 +46,18 @@ namespace Service.Services
         {
             var printedReceipt = $"{receipt.Message}\n";
             printedReceipt += $"{receipt.TimePrinted.Day}-{receipt.TimePrinted.Month}-{receipt.TimePrinted.Year} {receipt.TimePrinted.Hour}:{receipt.TimePrinted.Minute}:{receipt.TimePrinted.Second}\n\n";
-            printedReceipt += "Naam Aantal Prijs Korting Subtotaal \n";
+            printedReceipt += string.Format(_format, "Naam", "Aantal", "Prijs", "Korting", "Subtotaal") + "\n";
 
             foreach (var product in receipt.BoughtProducts)
             {
-                printedReceipt += $"{product.ProductName}  ";
-                printedReceipt += $"{product.Amount}  ";
-                printedReceipt += $"{product.ProductPrice}  ";
-                printedReceipt += $"{PrintDiscount(product)}";
-                printedReceipt += $"{product.Total}  ";
-                printedReceipt += "\n";
+                printedReceipt += string.Format(_format, product.ProductName, product.Amount, product.ProductPrice, 
+                    PrintDiscount(product), product.Total) + "\n";
+                //printedReceipt += $"{product.ProductName}  ";
+                //printedReceipt += $"{product.Amount}  ";
+                //printedReceipt += $"{product.ProductPrice}  ";
+                //printedReceipt += $"{PrintDiscount(product)}";
+                //printedReceipt += $"{product.Total}  ";
+                //printedReceipt += "\n";
             }
             printedReceipt += $"Totaal: {receipt.TotalPrice}";
 
