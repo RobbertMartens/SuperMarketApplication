@@ -52,12 +52,6 @@ namespace Service.Services
             {
                 printedReceipt += string.Format(_format, product.ProductName, product.Amount, product.ProductPrice, 
                     PrintDiscount(product), product.Total) + "\n";
-                //printedReceipt += $"{product.ProductName}  ";
-                //printedReceipt += $"{product.Amount}  ";
-                //printedReceipt += $"{product.ProductPrice}  ";
-                //printedReceipt += $"{PrintDiscount(product)}";
-                //printedReceipt += $"{product.Total}  ";
-                //printedReceipt += "\n";
             }
             printedReceipt += $"Totaal: {receipt.TotalPrice}";
 
