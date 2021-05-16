@@ -25,7 +25,7 @@ namespace Service
         {
             services.AddControllers();
             services.AddScoped<ICalculateProductPrice, CalculateProductPrice>();
-            services.AddScoped<ICalculateCartPrice, CalculateCartPrice>();
+            services.AddScoped<IReceiptService, ReceiptService>();
             services.AddScoped<IRegisterService, RegisterService>();
             services.AddDbContext<ProductContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProductContext")));

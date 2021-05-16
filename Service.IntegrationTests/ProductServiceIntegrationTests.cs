@@ -23,6 +23,9 @@ namespace Service.IntegrationTests
 
             // Assert
             Assert.AreEqual(expectedRowsAffected, rowsAffected);
+
+            // CleanUp
+            await ProductService.IncreaseProductAmount(barcode, 1);
         }
 
         [Test]
