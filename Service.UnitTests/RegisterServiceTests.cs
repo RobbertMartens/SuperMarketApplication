@@ -8,13 +8,13 @@ namespace Service.UnitTests
 {
     public class RegisterServiceTests
     {
-        private Mock<ICalculateCartPrice> _calculatePriceServiceMock;
+        private Mock<IReceiptService> _calculatePriceServiceMock;
         private Cart _cart;
 
         [SetUp]
         public void Setup()
         {
-            _calculatePriceServiceMock = new Mock<ICalculateCartPrice>();
+            _calculatePriceServiceMock = new Mock<IReceiptService>();
             
             _cart = new Cart();
             _cart.AddToCart(new Product { ProductName = "Kaas", Barcode = 156734, Price = 4.99M });
@@ -28,14 +28,14 @@ namespace Service.UnitTests
         public void Register_ShouldPass_WhenCheckOut()
         {
             // Assemble
-            _calculatePriceServiceMock.Setup(mock => mock.Calculate(_cart));
+            _calculatePriceServiceMock.Setup(mock => mock.CreateReceipt(_cart));
             var registerService = new RegisterService(_calculatePriceServiceMock.Object);
 
             // Act
             registerService.CheckOut(_cart);
 
             // Assert
-            _calculatePriceServiceMock.Verify(mock => mock.Calculate(_cart), Times.Once);
+            _calculatePriceServiceMock.Verify(mock => mock.CreateReceipt(_cart), Times.Once);
         }
     }
 }

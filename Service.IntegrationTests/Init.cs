@@ -12,7 +12,7 @@ namespace Service.IntegrationTests
     public class Init
     {
         protected ICalculateProductPrice CalculateProductPrice;
-        protected ICalculateCartPrice CalculateCartPrice;
+        protected IReceiptService ReceiptService;
         protected IRegisterService RegisterService;
         protected IProductService ProductService;
         protected ILijpeVoorraadServerService LijpeVoorraadServerService;
@@ -31,7 +31,7 @@ namespace Service.IntegrationTests
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddDbContext<ProductContext>(options => options.UseSqlServer(Config.ProductContext));
             serviceCollection.AddScoped<ICalculateProductPrice, CalculateProductPrice>();
-            serviceCollection.AddScoped<ICalculateCartPrice, CalculateCartPrice>();
+            serviceCollection.AddScoped<IReceiptService, ReceiptService>();
             serviceCollection.AddScoped<IRegisterService, RegisterService>();
             serviceCollection.AddScoped<IProductService, ProductService>();
             serviceCollection.AddScoped<ILijpeVoorraadServerService, LijpeVoorraadServerService>();
@@ -39,7 +39,7 @@ namespace Service.IntegrationTests
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             CalculateProductPrice = serviceProvider.GetService<ICalculateProductPrice>();
-            CalculateCartPrice = serviceProvider.GetService<ICalculateCartPrice>();
+            ReceiptService = serviceProvider.GetService<IReceiptService>();
             RegisterService = serviceProvider.GetService<IRegisterService>();
             ProductService = serviceProvider.GetService<IProductService>();
             LijpeVoorraadServerService = serviceProvider.GetService<ILijpeVoorraadServerService>();

@@ -6,19 +6,20 @@ namespace Service.Services
 {
     public class RegisterService : IRegisterService
     {
-        private readonly ICalculateCartPrice _calculateCartPriceService;
+        private readonly IReceiptService _receiptService;
 
-        public RegisterService(ICalculateCartPrice calculatePriceService)
+        public RegisterService(IReceiptService calculatePriceService)
         {
-            _calculateCartPriceService = calculatePriceService;
+            _receiptService = calculatePriceService;
         }
 
         public string CheckOut(Cart cart)
         {
-            var totalPrice = _calculateCartPriceService.Calculate(cart);
-            var receipt = $"Totaalbedrag: {totalPrice}";
+            var receipt = _receiptService.CreateReceipt(cart);
+            var text = _receiptService.PrintReceipt(receipt);
+            // Decrease Product amounts
             Console.WriteLine(receipt);
-            return receipt;
+            return text;
         }
     }
 }

@@ -7,23 +7,29 @@ namespace Service.Services
 {
     public class CalculateProductPrice : ICalculateProductPrice
     {
-        public decimal Calculate(Product product)
+        // TODO: Add Amount to formula
+        public decimal Calculate(Product product, int amount)
         {
             if (product == null)
             {
                 throw new NullReferenceException("Given product is null!");
             }
 
+            if (amount < 1)
+            {
+                throw new ArgumentOutOfRangeException($"Invalid amount received! Actual: {amount}");
+            }
+
             switch (product.Discount)
             {
                 case Discount.NoDiscount:
-                    return product.Price;
+                    return Math.Round(product.Price * amount, 2);
 
                 case Discount.Bonus:
-                    return product.Price * Constants.BonusDiscount;
+                    return Math.Round(product.Price * amount * Constants.BonusDiscount, 2);
 
                 case Discount.Expiry:
-                    return product.Price * Constants.ExpiryDiscount;
+                    return Math.Round(product.Price * amount * Constants.ExpiryDiscount, 2);
 
                 default:
                     throw new ArgumentOutOfRangeException($"Incorrect enum received. Actual: {product.Discount}");
