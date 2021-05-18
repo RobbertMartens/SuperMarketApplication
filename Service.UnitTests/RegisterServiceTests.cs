@@ -11,14 +11,14 @@ namespace Service.UnitTests
 {
     public class RegisterServiceTests
     {
-        private Mock<IReceiptService> _calculatePriceServiceMock;
+        private Mock<IReceiptService> _receiptServiceMock;
         private Mock<IProductService> _productServiceMock;
         private Cart _cart;
 
         [SetUp]
         public void Setup()
         {
-            _calculatePriceServiceMock = new Mock<IReceiptService>();
+            _receiptServiceMock = new Mock<IReceiptService>();
             _productServiceMock = new Mock<IProductService>();
 
             _cart = new Cart();
@@ -33,7 +33,7 @@ namespace Service.UnitTests
         public async Task Register_ShouldPass_WhenCheckOut()
         {
             // Assemble
-            _calculatePriceServiceMock.Setup(mock => mock.CreateReceipt(_cart)).Returns(new Receipt
+            _receiptServiceMock.Setup(mock => mock.CreateReceipt(It.IsAny<Cart>())).Returns(new Receipt
             {
                 Message = "hoi test",
                 TotalPrice = 1.00M,
@@ -55,15 +55,27 @@ namespace Service.UnitTests
                 }
             });
 
-            var registerService = new RegisterService(_calculatePriceServiceMock.Object, _productServiceMock.Object);
+            _receiptServiceMock.Setup(mock => mock.PrintReceipt(It.IsAny<Receipt>())).Returns("hooiii");
+
+            _productServiceMock.Setup(mock => mock.GetProduct(It.IsAny<int>(), false)).
+                Returns(Task.FromResult(new Product
+            {
+                ProductName = "Kaas",
+                Amount = 2,
+                Barcode = 123123
+            }));
+
+            var registerService = new RegisterService(_receiptServiceMock.Object, _productServiceMock.Object);
 
             // Act
             await registerService.CheckOut(_cart);
 
             // Assert
-            _calculatePriceServiceMock.Verify(mock => mock.CreateReceipt(_cart), Times.Once);
+            _receiptServiceMock.Verify(mock => mock.CreateReceipt(It.IsAny<Cart>()), Times.Once);
+            _receiptServiceMock.Verify(mock => mock.PrintReceipt(It.IsAny<Receipt>()), Times.Once);
+            _productServiceMock.Verify(mock => mock.GetProduct(It.IsAny<int>(), false), Times.Exactly(5));
             _productServiceMock.Verify(mock => mock.DecreaseProductAmount(It.IsAny<int>(), It.IsAny<int>()), 
-                Times.Exactly(2));
+                Times.Exactly(5));
         }
     }
 }

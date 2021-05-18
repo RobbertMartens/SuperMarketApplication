@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -11,25 +12,23 @@ namespace Service.IntegrationTests
 {
     public class Init
     {
+        protected IConfiguration Configuration;
         protected ICalculateProductPrice CalculateProductPrice;
         protected IReceiptService ReceiptService;
         protected IRegisterService RegisterService;
         protected IProductService ProductService;
         protected ILijpeVoorraadServerService LijpeVoorraadServerService;
-        private AppSettings Config;
 
         [SetUp]
         public void SetUp()
         {
-            var filePath = Directory.GetCurrentDirectory().Replace(@"bin\Debug\netcoreapp3.1", "") + "appsettings.json";
-            using (var reader = new StreamReader(filePath))
-            {
-                var file = reader.ReadToEnd();
-                Config = JsonConvert.DeserializeObject<AppSettings>(file);
-            }
-
+            var builder = new ConfigurationBuilder().
+                SetBasePath(Directory.GetCurrentDirectory()).
+                AddJsonFile("appsettings.json");
+            Configuration = builder.Build();
+            
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddDbContext<ProductContext>(options => options.UseSqlServer(Config.ProductContext));
+            serviceCollection.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductContext")));
             serviceCollection.AddScoped<ICalculateProductPrice, CalculateProductPrice>();
             serviceCollection.AddScoped<IReceiptService, ReceiptService>();
             serviceCollection.AddScoped<IRegisterService, RegisterService>();

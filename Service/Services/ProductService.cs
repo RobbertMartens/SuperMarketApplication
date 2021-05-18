@@ -2,6 +2,7 @@
 using Service.Interfaces;
 using Service.Models;
 using Service.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,9 +39,16 @@ namespace Service.Services
             return await Task.FromResult(_context.Product.ToList().Where(p => p.Amount < provisionMax));
         }
 
-        public async Task<Product> GetProduct(int barcode)
+        public async Task<Product> GetProduct(int barcode, bool allowChangeTracking = true)
         {
-            return await _context.Product.FirstOrDefaultAsync(x => x.Barcode == barcode);
+            if (allowChangeTracking)
+            {
+                return await _context.Product.FirstOrDefaultAsync(x => x.Barcode == barcode);
+            }
+            else
+            {
+                return await _context.Product.AsNoTracking().FirstOrDefaultAsync(x => x.Barcode == barcode);
+            }
         }
 
         public async Task<int> IncreaseProductAmount(int barcode, int amount)
