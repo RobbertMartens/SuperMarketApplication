@@ -45,7 +45,7 @@ namespace Service.Services
         public string PrintReceipt(Receipt receipt)
         {
             var printedReceipt = $"{receipt.Message}\n";
-            printedReceipt += $"{receipt.TimePrinted.Day}-{receipt.TimePrinted.Month}-{receipt.TimePrinted.Year} {receipt.TimePrinted.Hour}:{receipt.TimePrinted.Minute}:{receipt.TimePrinted.Second}\n\n";
+            printedReceipt += DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss") + "\n";
             printedReceipt += string.Format(_format, "Naam", "Aantal", "Prijs", "Korting", "Subtotaal") + "\n";
 
             foreach (var product in receipt.BoughtProducts)
