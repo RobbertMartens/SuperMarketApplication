@@ -7,7 +7,6 @@ namespace Service.Services
 {
     public class CalculateProductPrice : ICalculateProductPrice
     {
-        // TODO: Add Amount to formula
         public decimal Calculate(Product product, int amount)
         {
             if (product == null)
