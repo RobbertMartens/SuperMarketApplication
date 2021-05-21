@@ -18,6 +18,7 @@ namespace Service.IntegrationTests
         protected IRegisterService RegisterService;
         protected IProductService ProductService;
         protected ILijpeVoorraadServerService LijpeVoorraadServerService;
+        protected IMapperService MapperService;
 
         [SetUp]
         public void SetUp()
@@ -34,6 +35,7 @@ namespace Service.IntegrationTests
             serviceCollection.AddScoped<IRegisterService, RegisterService>();
             serviceCollection.AddScoped<IProductService, ProductService>();
             serviceCollection.AddScoped<ILijpeVoorraadServerService, LijpeVoorraadServerService>();
+            serviceCollection.AddScoped<IMapperService, MapperService>();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 

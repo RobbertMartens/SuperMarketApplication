@@ -9,36 +9,23 @@ namespace Service.Services
     public class ReceiptService : IReceiptService
     {
         private const string _format = "{0, -25}{1, -10}{2, 15}{3, 15}{4, 15}";
-        private readonly ICalculateProductPrice _calculateProductPrice;
+        private readonly IMapperService _mapperService;
 
-        public ReceiptService(ICalculateProductPrice calculateProductPrice)
+        public ReceiptService(IMapperService mapperService)
         {
-            _calculateProductPrice = calculateProductPrice;
+            _mapperService = mapperService;
         }
 
         public Receipt CreateReceipt(Cart cart)
         {
-            var receipt = new Receipt
-            {
-                Message = "Bedankt dat u bij de Boni bent geweest!",
-                TimePrinted = DateTime.Now,
-                BoughtProducts = new List<ProductReceipt>()
-            };
-            
+            List<ReceiptProduct> receiptProducts = new List<ReceiptProduct>();
+
             foreach (var product in cart.Products)
             {
-                var productReceipt = new ProductReceipt();
-                productReceipt.ProductName = product.ProductName;
-                productReceipt.Barcode = product.Barcode;
-                productReceipt.Amount = product.Amount;
-                productReceipt.Discount = product.Discount;
-                productReceipt.ProductPrice = product.Price;
-                productReceipt.ProductPriceWithDiscount = _calculateProductPrice.Calculate(product, 1);
-                productReceipt.Total = _calculateProductPrice.Calculate(product, product.Amount);
-
-                receipt.BoughtProducts.Add(productReceipt);
-                receipt.TotalPrice += productReceipt.Total;
+                receiptProducts.Add(_mapperService.MapReceiptProduct(product));
             }
+            
+            var receipt = _mapperService.MapReceipt(receiptProducts);
             return receipt;
         }
 
@@ -58,7 +45,7 @@ namespace Service.Services
             return printedReceipt;
         }
 
-        private string PrintDiscount(ProductReceipt product)
+        private string PrintDiscount(ReceiptProduct product)
         {
             if (product.Discount == Discount.NoDiscount)
             {
