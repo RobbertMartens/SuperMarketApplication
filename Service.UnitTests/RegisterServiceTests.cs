@@ -38,15 +38,15 @@ namespace Service.UnitTests
                 Message = "hoi test",
                 TotalPrice = 1.00M,
                 TimePrinted = DateTime.Now,
-                BoughtProducts = new List<ProductReceipt>
+                BoughtProducts = new List<ReceiptProduct>
                 {
-                    new ProductReceipt
+                    new ReceiptProduct
                     {
                         ProductName = _cart.Products[0].ProductName,
                         Barcode = _cart.Products[0].Barcode,
                         ProductPrice = _cart.Products[0].Price
                     },
-                    new ProductReceipt
+                    new ReceiptProduct
                     {
                         ProductName = _cart.Products[1].ProductName,
                         Barcode = _cart.Products[1].Barcode,
