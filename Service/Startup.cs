@@ -32,6 +32,7 @@ namespace Service
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ILijpeVoorraadServerService, LijpeVoorraadServerService>();
             services.AddScoped<ISupplyClient, LijpeVoorraadServerClient>();
+            services.AddScoped<IMapperService, MapperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
