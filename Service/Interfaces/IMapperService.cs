@@ -7,5 +7,6 @@ namespace Service.Interfaces
     {
         Receipt MapReceipt(IEnumerable<ReceiptProduct> receiptProducts);
         ReceiptProduct MapReceiptProduct(Product product);
+        SupplyRequest MapSupplyRequest(IEnumerable<Product> products);
     }
 }

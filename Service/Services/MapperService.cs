@@ -70,5 +70,25 @@ namespace Service.Services
             }
             return productReceipt;
         }
+
+        public SupplyRequest MapSupplyRequest(IEnumerable<Product> products)
+        {
+            if (products == null) { throw new NullReferenceException("Received products is null"); }
+
+            var supplyRequest = new SupplyRequest
+            {
+                ProductsToSupply = new List<ProductToSupply>()
+            };
+
+            foreach (var product in products)
+            {
+                supplyRequest.ProductsToSupply.Add(new ProductToSupply
+                {
+                    Amount = product.Amount,
+                    Barcode = product.Barcode
+                });
+            }
+            return supplyRequest;
+        }
     }
 }

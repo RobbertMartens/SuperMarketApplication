@@ -21,7 +21,7 @@ namespace Service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> PostCheckOut(Cart cart)
+        public async Task<IActionResult> PostCheckOut(Cart cart)
         {
             if (cart == null || cart.Products == null) { return BadRequest(); }
 

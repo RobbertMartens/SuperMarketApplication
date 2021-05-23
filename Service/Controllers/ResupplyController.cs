@@ -15,19 +15,21 @@ namespace Service.Controllers
     {
         private readonly ILogger<ResupplyController> _logger;
         private readonly ILijpeVoorraadServerService _voorraadService;
+        private readonly IProductService _productService;
 
-        public ResupplyController(ILogger<ResupplyController> logger, ILijpeVoorraadServerService voorraadService)
+        public ResupplyController(ILogger<ResupplyController> logger, ILijpeVoorraadServerService voorraadService, IProductService productService)
         {
             _voorraadService = voorraadService;
+            _productService = productService;
             _logger = logger;
         }
 
-        [HttpPost]
-        public async Task<ActionResult> PostResupply(SupplyRequest Resupply)
+        [HttpPut]
+        public async Task<IActionResult> PutResupply(SupplyRequest Resupply)
         {
-            if (Resupply == null || Resupply.ProvisionProducts == null)
+            if (Resupply == null || Resupply.ProductsToSupply == null)
             {
-                return BadRequest();
+                return new BadRequestResult();
             }
             try
             {
@@ -36,10 +38,38 @@ namespace Service.Controllers
             }
             catch (Exception)
             {
-                return BadRequest();
+                return new BadRequestResult();
             }
         }
 
-        // Get current supply
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentSupplies()
+        {
+            try
+            {
+                var supplies = await _voorraadService.GetCurrentSupplies();
+                return new OkObjectResult(supplies);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> PostNewProduct(Product product)
+        {
+            if (product == null) { return new BadRequestResult(); }
+
+            try
+            {
+                await _productService.InsertProduct(product);
+                return new OkResult();
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult();
+            }
+        }
     }
 }
