@@ -34,9 +34,9 @@ namespace Service.Services
             return rowsAffected;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsToResupply(int provisionMax)
+        public async Task<IEnumerable<Product>> GetAllProducts()
         {
-            return await Task.FromResult(_context.Product.ToList().Where(p => p.Amount < provisionMax));
+            return await _context.Product.ToListAsync();
         }
 
         public async Task<Product> GetProduct(int barcode, bool allowChangeTracking = true)

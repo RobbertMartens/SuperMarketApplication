@@ -9,46 +9,30 @@ namespace Service.Services
     public class LijpeVoorraadServerService : ILijpeVoorraadServerService
     {
         private readonly IProductService _productService;
+        private readonly IMapperService _mapperService;
 
-        public LijpeVoorraadServerService(IProductService productService)
+        public LijpeVoorraadServerService(IProductService productService, IMapperService mapperService)
         {
             _productService = productService;
-        }
-
-        public async Task<HttpResponseMessage> PostSupplyRequest(ISupplyClient client, SupplyRequest request)
-        {
-            return await client.SendSupplyRequest(request);
+            _mapperService = mapperService;
         }
 
         public async Task<int> ProcessResupplyAmounts(SupplyRequest request)
         {
             int rowsAffected = 0;
 
-            foreach (var product in request.ProvisionProducts)
+            foreach (var product in request.ProductsToSupply)
             {
                 rowsAffected += await _productService.IncreaseProductAmount(product.Barcode, product.Amount);
             }
             return rowsAffected;
         }
 
-        public async Task<SupplyRequest> CreateSupplyRequest(int provisionMax)
+        public async Task<SupplyRequest> GetCurrentSupplies()
         {
-            var provisioningRequest = new SupplyRequest
-            {
-                ProvisionProducts = new List<ProvisioningProduct>()
-            };
-
-            var provisioningProducts = await _productService.GetProductsToResupply(100);
-
-            foreach (var product in provisioningProducts)
-            {
-                provisioningRequest.ProvisionProducts.Add(new ProvisioningProduct
-                {
-                    Barcode = product.Barcode,
-                    Amount = provisionMax - product.Amount
-                });
-            }
-            return provisioningRequest;
+            var products = await _productService.GetAllProducts();
+            var supplyRequest = _mapperService.MapSupplyRequest(products);
+            return supplyRequest;
         }
     }
 }

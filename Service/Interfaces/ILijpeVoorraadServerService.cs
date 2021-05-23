@@ -6,8 +6,7 @@ namespace Service.Interfaces
 {
     public interface ILijpeVoorraadServerService
     {
-        Task<HttpResponseMessage> PostSupplyRequest(ISupplyClient client, SupplyRequest request);
         Task <int> ProcessResupplyAmounts(SupplyRequest request);
-        Task<SupplyRequest> CreateSupplyRequest(int provisionMax);
+        Task<SupplyRequest> GetCurrentSupplies();
     }
 }

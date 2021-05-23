@@ -6,10 +6,10 @@ namespace Service.Models
 {
     public class SupplyRequest
     {
-        public List<ProvisioningProduct> ProvisionProducts { get; set; }
+        public List<ProductToSupply> ProductsToSupply { get; set; }
     }
 
-    public class ProvisioningProduct
+    public class ProductToSupply
     {
         public int Barcode { get; set; }
         public int Amount { get; set; }

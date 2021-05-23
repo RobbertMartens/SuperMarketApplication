@@ -100,5 +100,40 @@ namespace Service.UnitTests
             // Act & Assert
             Assert.That(() => _mapperService.MapReceipt(receiptProducts), Throws.TypeOf<NullReferenceException>());
         }
+
+        [Test]
+        public void MapSupplyRequest_GivenCorrectArguments_ShouldReturnSupplyRequest()
+        {
+            // Assemble
+            var products = new List<Product>
+            {
+                new Product { ProductName = "Kaas", Barcode = 156734, Price = 4.99M, Amount = 4, Id = 1 },
+                new Product { ProductName = "Ham", Barcode = 123, Price = 1.49M, Amount = 2, Id = 8 }
+            };
+            _mapperService = new MapperService(_calculateProductPriceMock.Object);
+
+            // Act
+            var supplyRequest = _mapperService.MapSupplyRequest(products);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(4, supplyRequest.ProductsToSupply[0].Amount);
+                Assert.AreEqual(156734, supplyRequest.ProductsToSupply[0].Barcode);
+                Assert.AreEqual(2, supplyRequest.ProductsToSupply[1].Amount);
+                Assert.AreEqual(123, supplyRequest.ProductsToSupply[1].Barcode);
+            });
+        }
+
+        [Test]
+        public void MapSupplyRequest_GivenNullProducts_ShouldReturnNullReferenceException()
+        {
+            // Assemble
+            IEnumerable<Product> products = null;
+            _mapperService = new MapperService(_calculateProductPriceMock.Object);
+
+            // Act & Assert
+            Assert.That(() => _mapperService.MapSupplyRequest(products), Throws.TypeOf<NullReferenceException>());
+        }
     }
 }
