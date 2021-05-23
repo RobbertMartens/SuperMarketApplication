@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Service.Clients;
 using Service.Interfaces;
 using Service.Repositories;
 using Service.Services;
@@ -31,7 +30,6 @@ namespace Service
                 options.UseSqlServer(Configuration.GetConnectionString("ProductContext")));
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ILijpeVoorraadServerService, LijpeVoorraadServerService>();
-            services.AddScoped<ISupplyClient, LijpeVoorraadServerClient>();
             services.AddScoped<IMapperService, MapperService>();
         }
 

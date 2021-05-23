@@ -39,11 +39,6 @@ namespace Service.Services
             return await _context.Product.ToListAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetProductsToResupply(int provisionMax)
-        {
-            return await Task.FromResult(_context.Product.ToList().Where(p => p.Amount < provisionMax));
-        }
-
         public async Task<Product> GetProduct(int barcode, bool allowChangeTracking = true)
         {
             if (allowChangeTracking)

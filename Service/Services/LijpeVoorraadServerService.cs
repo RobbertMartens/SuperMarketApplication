@@ -17,11 +17,6 @@ namespace Service.Services
             _mapperService = mapperService;
         }
 
-        public async Task<HttpResponseMessage> PostSupplyRequest(ISupplyClient client, SupplyRequest request)
-        {
-            return await client.SendSupplyRequest(request);
-        }
-
         public async Task<int> ProcessResupplyAmounts(SupplyRequest request)
         {
             int rowsAffected = 0;
@@ -31,26 +26,6 @@ namespace Service.Services
                 rowsAffected += await _productService.IncreaseProductAmount(product.Barcode, product.Amount);
             }
             return rowsAffected;
-        }
-
-        public async Task<SupplyRequest> CreateSupplyRequest(int supplyMax)
-        {
-            var supplyRequest = new SupplyRequest
-            {
-                ProductsToSupply = new List<ProductToSupply>()
-            };
-
-            var provisioningProducts = await _productService.GetProductsToResupply(100);
-
-            foreach (var product in provisioningProducts)
-            {
-                supplyRequest.ProductsToSupply.Add(new ProductToSupply
-                {
-                    Barcode = product.Barcode,
-                    Amount = supplyMax - product.Amount
-                });
-            }
-            return supplyRequest;
         }
 
         public async Task<SupplyRequest> GetCurrentSupplies()
