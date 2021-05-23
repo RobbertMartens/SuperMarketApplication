@@ -9,7 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
     public class LijpeVoorraadServerServiceTests
     {

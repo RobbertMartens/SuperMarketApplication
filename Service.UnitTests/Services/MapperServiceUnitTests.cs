@@ -9,7 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
     public class MapperServiceUnitTests
     {

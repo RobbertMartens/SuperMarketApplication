@@ -7,7 +7,7 @@ using Service.Services;
 using System;
 using System.Collections.Generic;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
     public class ReceiptServiceUnitTests
     {

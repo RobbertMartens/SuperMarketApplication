@@ -5,7 +5,7 @@ using Service.Interfaces;
 using Service.Models;
 using Service.Repositories;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
     public class ProductServiceTests
     {

@@ -5,7 +5,7 @@ using Service.Models;
 using Service.Services;
 using System;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
     public class CalculateProductPriceTests
     {
