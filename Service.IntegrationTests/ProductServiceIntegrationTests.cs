@@ -1,8 +1,10 @@
+using Newtonsoft.Json;
 using NUnit.Framework;
 using Service.Enum;
 using Service.IntegrationTests;
 using Service.Models;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Service.IntegrationTests
@@ -54,9 +56,17 @@ namespace Service.IntegrationTests
         }
 
         [Test]
+        public async Task GetAllProducts_ShouldReturnMultipleProducts()
+        {
+            var products = await ProductService.GetAllProducts();
+            Assert.Greater(Enumerable.Count(products), 1);
+        }
+
+        [Test]
         public async Task GetProductTest_ShouldReturnOneProduct()
         {
             var product = await ProductService.GetProduct(156734);
+            Console.WriteLine(JsonConvert.SerializeObject(product));
             Assert.AreEqual("Kaas", product.ProductName);
         }
 

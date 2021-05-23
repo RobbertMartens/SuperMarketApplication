@@ -15,6 +15,7 @@ namespace Service.UnitTests
         private ILijpeVoorraadServerService _service;
         private Mock<ISupplyClient> _mockClient;
         private Mock<IProductService> _mockProductService;
+        private Mock<IMapperService> _mapperService;
 
         [Test]
         public async Task PostProvisioning_ShouldReturn200()
@@ -28,16 +29,17 @@ namespace Service.UnitTests
             // Assemble
             var provisioningRequest = new SupplyRequest
             {
-                ProvisionProducts = new List<ProvisioningProduct>()
+                ProductsToSupply = new List<ProductToSupply>()
             };
-            provisioningRequest.ProvisionProducts.Add(new ProvisioningProduct { Amount = 5, Barcode = 123 });
-            provisioningRequest.ProvisionProducts.Add(new ProvisioningProduct { Amount = 12, Barcode = 1834 });
+            provisioningRequest.ProductsToSupply.Add(new ProductToSupply { Amount = 5, Barcode = 123 });
+            provisioningRequest.ProductsToSupply.Add(new ProductToSupply { Amount = 12, Barcode = 1834 });
 
             _mockProductService = new Mock<IProductService>();
+            _mapperService = new Mock<IMapperService>();
             _mockClient = new Mock<ISupplyClient>();
             _mockClient.Setup(m => m.SendSupplyRequest(provisioningRequest)).Returns(Task.FromResult(mockResponseMessage));
             
-            _service = new LijpeVoorraadServerService(_mockProductService.Object);
+            _service = new LijpeVoorraadServerService(_mockProductService.Object, _mapperService.Object);
 
             // Act
             var result = await _service.PostSupplyRequest(_mockClient.Object, provisioningRequest);

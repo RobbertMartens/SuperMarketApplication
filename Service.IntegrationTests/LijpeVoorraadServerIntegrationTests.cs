@@ -14,7 +14,7 @@ namespace Service.IntegrationTests
             var provisionProducts = await LijpeVoorraadServerService.CreateSupplyRequest(100);
 
             // Assert
-            Assert.That(provisionProducts.ProvisionProducts.Count >= 2);
+            Assert.That(provisionProducts.ProductsToSupply.Count >= 2);
         }
 
         [Test]
