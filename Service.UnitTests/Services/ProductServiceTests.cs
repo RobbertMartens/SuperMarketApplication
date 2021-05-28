@@ -6,7 +6,6 @@ using Service.Interfaces;
 using Service.Models;
 using Service.Repositories;
 using Service.Services;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,16 +15,13 @@ namespace Service.UnitTests.Services
     {
         private Mock<DbSet<Product>> _mockSet;
         private Mock<ProductContext> _mockContext;
-        private Mock<DbContextOptions> _mockDbContextOptions;
         private IProductService _productService;
 
         [SetUp]
         public void Init()
         {
-            _mockDbContextOptions = new Mock<DbContextOptions>(It.IsAny<IReadOnlyDictionary<It.IsAnyType, It.IsAnyType>>());
             _mockSet = new Mock<DbSet<Product>>();
-            _mockContext = new Mock<ProductContext>(new DbContextOptionsBuilder().Options);
-            
+            _mockContext = new Mock<ProductContext>(new DbContextOptionsBuilder().Options);     
         }
 
         [Test]
