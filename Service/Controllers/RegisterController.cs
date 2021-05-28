@@ -23,6 +23,10 @@ namespace Service.Controllers
         [HttpPost]
         public async Task<IActionResult> PostCheckOut(Cart cart)
         {
+            if (ModelState.IsValid)
+            {
+                Console.WriteLine("model is valid");
+            }
             if (cart == null || cart.Products == null) { return BadRequest(); }
 
             try
