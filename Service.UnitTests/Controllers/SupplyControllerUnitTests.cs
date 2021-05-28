@@ -14,17 +14,17 @@ using System.Threading.Tasks;
 
 namespace Service.UnitTests.Controllers
 {
-    public class ResupplyControllerUnitTests
+    public class SupplyControllerUnitTests
     {
-        private Mock<ILogger<ResupplyController>> _mockLogger;
+        private Mock<ILogger<SupplyController>> _mockLogger;
         private Mock<ILijpeVoorraadServerService> _mockVoorraadservice;
         private Mock<IProductService> _mockProductService;
-        private ResupplyController _resupplyController;
+        private SupplyController _supplyController;
 
         [SetUp]
         public void Init()
         {
-            _mockLogger = new Mock<ILogger<ResupplyController>>();
+            _mockLogger = new Mock<ILogger<SupplyController>>();
             _mockVoorraadservice = new Mock<ILijpeVoorraadServerService>();
             _mockProductService = new Mock<IProductService>();
         }
@@ -33,7 +33,7 @@ namespace Service.UnitTests.Controllers
         public async Task PutSupply_WithCorrectArguments_ShouldReturnOkObjectResult()
         {
             // Assemble
-            var resupplyRequest = new SupplyRequest
+            var supplyRequest = new SupplyRequest
             {
                 ProductsToSupply = new List<ProductToSupply>
                 {
@@ -49,63 +49,63 @@ namespace Service.UnitTests.Controllers
                     }
                 }
             };
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(resupplyRequest));
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest));
 
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _resupplyController.PutResupply(resupplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplyRequest);
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(resupplyRequest), Times.Once);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Once);
         }
 
         [Test]
         public async Task PutSupply_WithNullResupplyRequest_ShouldReturnBadRequestResult()
         {
             // Assemble
-            SupplyRequest resupplyRequest = null;
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(resupplyRequest));
+            SupplyRequest supplyRequest = null;
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest));
 
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _resupplyController.PutResupply(resupplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplyRequest);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(resupplyRequest), Times.Never);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Never);
         }
 
         [Test]
         public async Task PutSupply_WithNullProductsToResupply_ShouldReturnBadRequestResult()
         {
             // Assemble
-            SupplyRequest resupplyRequest = new SupplyRequest
+            SupplyRequest supplyRequest = new SupplyRequest
             {
                 ProductsToSupply = null
             };
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(resupplyRequest));
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest));
 
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _resupplyController.PutResupply(resupplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplyRequest);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(resupplyRequest), Times.Never);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Never);
         }
 
         [Test]
         public async Task PutSupply_VoorraadServiceThrows_ShouldReturnBadRequestResult()
         {
             // Assemble
-            var resupplyRequest = new SupplyRequest
+            var supplyRequest = new SupplyRequest
             {
                 ProductsToSupply = new List<ProductToSupply>
                 {
@@ -121,24 +121,24 @@ namespace Service.UnitTests.Controllers
                     }
                 }
             };
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(resupplyRequest)).Throws(new Exception());
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest)).Throws(new Exception());
 
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _resupplyController.PutResupply(resupplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplyRequest);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(resupplyRequest), Times.Once);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Once);
         }
 
         [Test]
         public async Task GetCurrentSupplies_ShouldReturnOkObjectResult()
         {
             // Assemble
-            var resupplyRequest = new SupplyRequest
+            var supplyRequest = new SupplyRequest
             {
                 ProductsToSupply = new List<ProductToSupply>
                 {
@@ -154,12 +154,12 @@ namespace Service.UnitTests.Controllers
                     }
                 }
             };
-            _mockVoorraadservice.Setup(mock => mock.GetCurrentSupplies()).Returns(Task.FromResult(resupplyRequest));
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object, 
+            _mockVoorraadservice.Setup(mock => mock.GetCurrentSupplies()).Returns(Task.FromResult(supplyRequest));
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object, 
                 _mockProductService.Object);
 
             // Act
-            var result = await _resupplyController.GetCurrentSupplies();
+            var result = await _supplyController.GetCurrentSupplies();
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(result);
@@ -171,11 +171,11 @@ namespace Service.UnitTests.Controllers
         {
             // Assemble
             _mockVoorraadservice.Setup(mock => mock.GetCurrentSupplies()).Throws(new Exception());
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var result = await _resupplyController.GetCurrentSupplies();
+            var result = await _supplyController.GetCurrentSupplies();
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(result);
@@ -196,11 +196,11 @@ namespace Service.UnitTests.Controllers
             };
 
             _mockProductService.Setup(mock => mock.InsertProduct(product));
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var result = await _resupplyController.PostNewProduct(product);
+            var result = await _supplyController.PostNewProduct(product);
 
             // Assert
             Assert.IsInstanceOf<OkResult>(result);
@@ -214,11 +214,11 @@ namespace Service.UnitTests.Controllers
             Product product = null;
 
             _mockProductService.Setup(mock => mock.InsertProduct(product));
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var result = await _resupplyController.PostNewProduct(product);
+            var result = await _supplyController.PostNewProduct(product);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(result);
@@ -239,11 +239,11 @@ namespace Service.UnitTests.Controllers
             };
 
             _mockProductService.Setup(mock => mock.InsertProduct(product)).ThrowsAsync(new Exception());
-            _resupplyController = new ResupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
+            _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var result = await _resupplyController.PostNewProduct(product);
+            var result = await _supplyController.PostNewProduct(product);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(result);

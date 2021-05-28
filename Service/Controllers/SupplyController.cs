@@ -11,13 +11,13 @@ namespace Service.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ResupplyController : ControllerBase
+    public class SupplyController : ControllerBase
     {
-        private readonly ILogger<ResupplyController> _logger;
+        private readonly ILogger<SupplyController> _logger;
         private readonly ILijpeVoorraadServerService _voorraadService;
         private readonly IProductService _productService;
 
-        public ResupplyController(ILogger<ResupplyController> logger, ILijpeVoorraadServerService voorraadService, IProductService productService)
+        public SupplyController(ILogger<SupplyController> logger, ILijpeVoorraadServerService voorraadService, IProductService productService)
         {
             _voorraadService = voorraadService;
             _productService = productService;
@@ -25,16 +25,16 @@ namespace Service.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutResupply(SupplyRequest Resupply)
+        public async Task<IActionResult> PutSupply(SupplyRequest supplyRequest)
         {
-            if (Resupply == null || Resupply.ProductsToSupply == null)
+            if (supplyRequest == null || supplyRequest.ProductsToSupply == null)
             {
                 return new BadRequestResult();
             }
             try
             {
-                await _voorraadService.ProcessResupplyAmounts(Resupply);
-                return new OkObjectResult(Resupply);
+                await _voorraadService.ProcessResupplyAmounts(supplyRequest);
+                return new OkObjectResult(supplyRequest);
             }
             catch (Exception)
             {
