@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Service.Services
 {
-    public class LijpeVoorraadServerService : ILijpeVoorraadServerService
+    public class SupplyService : ISupplyService
     {
         private readonly IProductService _productService;
         private readonly IMapperService _mapperService;
 
-        public LijpeVoorraadServerService(IProductService productService, IMapperService mapperService)
+        public SupplyService(IProductService productService, IMapperService mapperService)
         {
             _productService = productService;
             _mapperService = mapperService;

@@ -5,15 +5,13 @@ using Service.Interfaces;
 using Service.Models;
 using Service.Services;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Service.UnitTests.Services
 {
-    public class LijpeVoorraadServerServiceTests
+    public class SupplyServiceUnitTests
     {
-        private LijpeVoorraadServerService _voorraadService;
+        private SupplyService _supplyService;
         private Mock<IProductService> _mockProductService;
         private Mock<IMapperService> _mockMapperService;
 
@@ -30,7 +28,7 @@ namespace Service.UnitTests.Services
             // Assemble
             _mockProductService.Setup(mock => mock.IncreaseProductAmount(It.IsAny<int>(), It.IsAny<int>())).
                 Returns(Task.FromResult(1));
-            _voorraadService = new LijpeVoorraadServerService(_mockProductService.Object, _mockMapperService.Object);
+            _supplyService = new SupplyService(_mockProductService.Object, _mockMapperService.Object);
             var supplyRequest = new SupplyRequest
             {
                 ProductsToSupply = new List<ProductToSupply>
@@ -52,7 +50,7 @@ namespace Service.UnitTests.Services
             var expectedRowsAffected = 2;
 
             // Act
-            var rowsAffected = await _voorraadService.ProcessResupplyAmounts(supplyRequest);
+            var rowsAffected = await _supplyService.ProcessResupplyAmounts(supplyRequest);
 
             // Assert
             Assert.AreEqual(expectedRowsAffected, rowsAffected);
@@ -105,10 +103,10 @@ namespace Service.UnitTests.Services
 
             _mockProductService.Setup(mock => mock.GetAllProducts()).Returns(Task.FromResult(products));
             _mockMapperService.Setup(mock => mock.MapSupplyRequest(products)).Returns(supplyRequest);
-            _voorraadService = new LijpeVoorraadServerService(_mockProductService.Object, _mockMapperService.Object);
+            _supplyService = new SupplyService(_mockProductService.Object, _mockMapperService.Object);
 
             // Act
-            var actualSupplyRequest = await _voorraadService.GetCurrentSupplies();
+            var actualSupplyRequest = await _supplyService.GetCurrentSupplies();
 
             // Assert
             _mockProductService.Verify(mock => mock.GetAllProducts(), Times.Once);

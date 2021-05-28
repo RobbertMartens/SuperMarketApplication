@@ -17,7 +17,7 @@ namespace Service.UnitTests.Controllers
     public class SupplyControllerUnitTests
     {
         private Mock<ILogger<SupplyController>> _mockLogger;
-        private Mock<ILijpeVoorraadServerService> _mockVoorraadservice;
+        private Mock<ISupplyService> _mockVoorraadservice;
         private Mock<IProductService> _mockProductService;
         private SupplyController _supplyController;
 
@@ -25,7 +25,7 @@ namespace Service.UnitTests.Controllers
         public void Init()
         {
             _mockLogger = new Mock<ILogger<SupplyController>>();
-            _mockVoorraadservice = new Mock<ILijpeVoorraadServerService>();
+            _mockVoorraadservice = new Mock<ISupplyService>();
             _mockProductService = new Mock<IProductService>();
         }
 

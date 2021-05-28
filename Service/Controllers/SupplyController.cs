@@ -3,8 +3,6 @@ using Microsoft.Extensions.Logging;
 using Service.Interfaces;
 using Service.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Service.Controllers
@@ -14,12 +12,12 @@ namespace Service.Controllers
     public class SupplyController : ControllerBase
     {
         private readonly ILogger<SupplyController> _logger;
-        private readonly ILijpeVoorraadServerService _voorraadService;
+        private readonly ISupplyService _supplyService;
         private readonly IProductService _productService;
 
-        public SupplyController(ILogger<SupplyController> logger, ILijpeVoorraadServerService voorraadService, IProductService productService)
+        public SupplyController(ILogger<SupplyController> logger, ISupplyService voorraadService, IProductService productService)
         {
-            _voorraadService = voorraadService;
+            _supplyService = voorraadService;
             _productService = productService;
             _logger = logger;
         }
@@ -33,7 +31,7 @@ namespace Service.Controllers
             }
             try
             {
-                await _voorraadService.ProcessResupplyAmounts(supplyRequest);
+                await _supplyService.ProcessResupplyAmounts(supplyRequest);
                 return new OkObjectResult(supplyRequest);
             }
             catch (Exception)
@@ -47,7 +45,7 @@ namespace Service.Controllers
         {
             try
             {
-                var supplies = await _voorraadService.GetCurrentSupplies();
+                var supplies = await _supplyService.GetCurrentSupplies();
                 return new OkObjectResult(supplies);
             }
             catch (Exception)
