@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Service.Interfaces;
 using Service.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Service.Controllers
@@ -23,16 +25,16 @@ namespace Service.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutSupply(SupplyRequest supplyRequest)
+        public async Task<IActionResult> PutSupply(List<Supply> supplies)
         {
-            if (supplyRequest == null || supplyRequest.ProductsToSupply == null)
+            if (supplies == null || supplies.Count == 0)
             {
                 return new BadRequestResult();
             }
             try
             {
-                await _supplyService.ProcessResupplyAmounts(supplyRequest);
-                return new OkObjectResult(supplyRequest);
+                await _supplyService.ProcessResupplyAmounts(supplies);
+                return new OkObjectResult(supplies);
             }
             catch (Exception)
             {

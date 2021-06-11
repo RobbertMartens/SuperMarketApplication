@@ -4,12 +4,7 @@ using System.Text;
 
 namespace Service.Models
 {
-    public class SupplyRequest
-    {
-        public List<ProductToSupply> ProductsToSupply { get; set; }
-    }
-
-    public class ProductToSupply
+    public class Supply
     {
         public int Barcode { get; set; }
         public int Amount { get; set; }

@@ -8,7 +8,9 @@ using Service.Enum;
 using Service.Interfaces;
 using Service.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,40 +35,38 @@ namespace Service.UnitTests.Controllers
         public async Task PutSupply_WithCorrectArguments_ShouldReturnOkObjectResult()
         {
             // Assemble
-            var supplyRequest = new SupplyRequest
+            var supplies = new List<Supply>
             {
-                ProductsToSupply = new List<ProductToSupply>
+                new Supply
                 {
-                    new ProductToSupply
-                    {
                         Amount = 5,
                         Barcode = 123
-                    },
-                    new ProductToSupply
-                    {
+                },
+                new Supply
+                {
                         Amount = 10,
                         Barcode = 321
-                    }
                 }
             };
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest));
+
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplies));
 
             _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _supplyController.PutSupply(supplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplies);
 
             // Assert
             Assert.IsInstanceOf<OkObjectResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Once);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplies), Times.Once);
         }
 
         [Test]
         public async Task PutSupply_WithNullResupplyRequest_ShouldReturnBadRequestResult()
         {
             // Assemble
-            SupplyRequest supplyRequest = null;
+            List<Supply> supplyRequest = null;
             _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest));
 
             _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
@@ -84,77 +84,67 @@ namespace Service.UnitTests.Controllers
         public async Task PutSupply_WithNullProductsToResupply_ShouldReturnBadRequestResult()
         {
             // Assemble
-            SupplyRequest supplyRequest = new SupplyRequest
-            {
-                ProductsToSupply = null
-            };
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest));
+            var supplies = new List<Supply>();
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplies));
 
             _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _supplyController.PutSupply(supplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplies);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Never);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplies), Times.Never);
         }
 
         [Test]
         public async Task PutSupply_VoorraadServiceThrows_ShouldReturnBadRequestResult()
         {
             // Assemble
-            var supplyRequest = new SupplyRequest
+            var supplies = new List<Supply>
             {
-                ProductsToSupply = new List<ProductToSupply>
+                new Supply
                 {
-                    new ProductToSupply
-                    {
-                        Amount = 5,
-                        Barcode = 123
-                    },
-                    new ProductToSupply
-                    {
-                        Amount = 10,
-                        Barcode = 321
-                    }
+                    Amount = 5,
+                    Barcode = 123
+                },
+                new Supply
+                {
+                    Amount = 10,
+                    Barcode = 321
                 }
             };
-            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplyRequest)).Throws(new Exception());
+            _mockVoorraadservice.Setup(mock => mock.ProcessResupplyAmounts(supplies)).Throws(new Exception());
 
             _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object,
                 _mockProductService.Object);
 
             // Act
-            var objectResult = await _supplyController.PutSupply(supplyRequest);
+            var objectResult = await _supplyController.PutSupply(supplies);
 
             // Assert
             Assert.IsInstanceOf<BadRequestResult>(objectResult);
-            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplyRequest), Times.Once);
+            _mockVoorraadservice.Verify(mock => mock.ProcessResupplyAmounts(supplies), Times.Once);
         }
 
         [Test]
         public async Task GetCurrentSupplies_ShouldReturnOkObjectResult()
         {
             // Assemble
-            var supplyRequest = new SupplyRequest
+            IEnumerable<Supply> supplies = new List<Supply>();
+            supplies.Append(new Supply
             {
-                ProductsToSupply = new List<ProductToSupply>
-                {
-                    new ProductToSupply
-                    {
-                        Amount = 5,
-                        Barcode = 123
-                    },
-                    new ProductToSupply
-                    {
-                        Amount = 10,
-                        Barcode = 321
-                    }
-                }
-            };
-            _mockVoorraadservice.Setup(mock => mock.GetCurrentSupplies()).Returns(Task.FromResult(supplyRequest));
+                Amount = 5,
+                Barcode = 123
+            });
+            supplies.Append(new Supply
+            {
+                Amount = 10,
+                Barcode = 321
+            });
+
+            _mockVoorraadservice.Setup(mock => mock.GetCurrentSupplies()).Returns(Task.FromResult(supplies));
             _supplyController = new SupplyController(_mockLogger.Object, _mockVoorraadservice.Object, 
                 _mockProductService.Object);
 

@@ -7,6 +7,7 @@ using Service.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Service.UnitTests.Services
@@ -105,7 +106,7 @@ namespace Service.UnitTests.Services
         public void MapSupplyRequest_GivenCorrectArguments_ShouldReturnSupplyRequest()
         {
             // Assemble
-            var products = new List<Product>
+            IEnumerable<Product> products = new List<Product>
             {
                 new Product { ProductName = "Kaas", Barcode = 156734, Price = 4.99M, Amount = 4, Id = 1 },
                 new Product { ProductName = "Ham", Barcode = 123, Price = 1.49M, Amount = 2, Id = 8 }
@@ -113,15 +114,15 @@ namespace Service.UnitTests.Services
             _mapperService = new MapperService(_calculateProductPriceMock.Object);
 
             // Act
-            var supplyRequest = _mapperService.MapSupplyRequest(products);
+            var supplies = _mapperService.MapSupplyRequest(products).ToList();
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(4, supplyRequest.ProductsToSupply[0].Amount);
-                Assert.AreEqual(156734, supplyRequest.ProductsToSupply[0].Barcode);
-                Assert.AreEqual(2, supplyRequest.ProductsToSupply[1].Amount);
-                Assert.AreEqual(123, supplyRequest.ProductsToSupply[1].Barcode);
+                Assert.AreEqual(4, supplies[0].Amount);
+                Assert.AreEqual(156734, supplies[0].Barcode);
+                Assert.AreEqual(2, supplies[1].Amount);
+                Assert.AreEqual(123, supplies[1].Barcode);
             });
         }
 
