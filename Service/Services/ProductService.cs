@@ -41,14 +41,19 @@ namespace Service.Services
 
         public async Task<Product> GetProduct(int barcode, bool allowChangeTracking = true)
         {
+            Product product = null;
+
             if (allowChangeTracking)
             {
-                return await _context.Product.FirstOrDefaultAsync(x => x.Barcode == barcode);
+                product = await _context.Product.FirstOrDefaultAsync(x => x.Barcode == barcode);
             }
             else
             {
-                return await _context.Product.AsNoTracking().FirstOrDefaultAsync(x => x.Barcode == barcode);
+                product = await _context.Product.AsNoTracking().FirstOrDefaultAsync(x => x.Barcode == barcode);
             }
+
+            if (product == null) { throw new KeyNotFoundException($"No product found with barcode: {barcode}"); }
+            return product;
         }
 
         public async Task<int> IncreaseProductAmount(int barcode, int amount)

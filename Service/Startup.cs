@@ -29,7 +29,7 @@ namespace Service
             services.AddDbContext<ProductContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ProductContext")));
             services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ILijpeVoorraadServerService, LijpeVoorraadServerService>();
+            services.AddScoped<ISupplyService, SupplyService>();
             services.AddScoped<IMapperService, MapperService>();
         }
 

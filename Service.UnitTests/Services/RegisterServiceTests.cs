@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
     public class RegisterServiceTests
     {

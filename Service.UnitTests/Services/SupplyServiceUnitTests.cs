@@ -5,15 +5,13 @@ using Service.Interfaces;
 using Service.Models;
 using Service.Services;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Service.UnitTests
+namespace Service.UnitTests.Services
 {
-    public class LijpeVoorraadServerServiceTests
+    public class SupplyServiceUnitTests
     {
-        private LijpeVoorraadServerService _voorraadService;
+        private SupplyService _supplyService;
         private Mock<IProductService> _mockProductService;
         private Mock<IMapperService> _mockMapperService;
 
@@ -30,21 +28,20 @@ namespace Service.UnitTests
             // Assemble
             _mockProductService.Setup(mock => mock.IncreaseProductAmount(It.IsAny<int>(), It.IsAny<int>())).
                 Returns(Task.FromResult(1));
-            _voorraadService = new LijpeVoorraadServerService(_mockProductService.Object, _mockMapperService.Object);
-            var supplyRequest = new SupplyRequest
+            _supplyService = new SupplyService(_mockProductService.Object, _mockMapperService.Object);
+
+
+            IEnumerable<Supply> supplies = new List<Supply>
             {
-                ProductsToSupply = new List<ProductToSupply>
-            {
-                    new ProductToSupply
-                    {
-                        Barcode = 123,
-                        Amount = 5
-                    },
-                    new ProductToSupply
-                    {
-                        Barcode = 5345,
-                        Amount = 3
-                    }
+                new Supply
+                {
+                    Barcode = 123,
+                    Amount = 5
+                },
+                new Supply
+                {
+                    Barcode = 5345,
+                    Amount = 3
                 }
             };
 
@@ -52,7 +49,7 @@ namespace Service.UnitTests
             var expectedRowsAffected = 2;
 
             // Act
-            var rowsAffected = await _voorraadService.ProcessResupplyAmounts(supplyRequest);
+            var rowsAffected = await _supplyService.ProcessResupplyAmounts(supplies);
 
             // Assert
             Assert.AreEqual(expectedRowsAffected, rowsAffected);
@@ -86,29 +83,26 @@ namespace Service.UnitTests
                 }
             };
 
-            var supplyRequest = new SupplyRequest
-            {
-                ProductsToSupply = new List<ProductToSupply>
+            IEnumerable<Supply> supplies = new List<Supply>
+            {         
+                new Supply
                 {
-                    new ProductToSupply
-                    {
-                        Amount = 50,
-                        Barcode = 123
-                    },
-                    new ProductToSupply
-                    {
-                        Amount = 0,
-                        Barcode = 321
-                    }
-                }
+                    Amount = 50,
+                    Barcode = 123
+                },
+                new Supply
+                {
+                    Amount = 0,
+                    Barcode = 321
+                }     
             };
 
             _mockProductService.Setup(mock => mock.GetAllProducts()).Returns(Task.FromResult(products));
-            _mockMapperService.Setup(mock => mock.MapSupplyRequest(products)).Returns(supplyRequest);
-            _voorraadService = new LijpeVoorraadServerService(_mockProductService.Object, _mockMapperService.Object);
+            _mockMapperService.Setup(mock => mock.MapSupplyRequest(products)).Returns(supplies);
+            _supplyService = new SupplyService(_mockProductService.Object, _mockMapperService.Object);
 
             // Act
-            var actualSupplyRequest = await _voorraadService.GetCurrentSupplies();
+            var actualSupplyRequest = await _supplyService.GetCurrentSupplies();
 
             // Assert
             _mockProductService.Verify(mock => mock.GetAllProducts(), Times.Once);

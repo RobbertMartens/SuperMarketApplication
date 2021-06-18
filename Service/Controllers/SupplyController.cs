@@ -3,38 +3,38 @@ using Microsoft.Extensions.Logging;
 using Service.Interfaces;
 using Service.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Service.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ResupplyController : ControllerBase
+    public class SupplyController : ControllerBase
     {
-        private readonly ILogger<ResupplyController> _logger;
-        private readonly ILijpeVoorraadServerService _voorraadService;
+        private readonly ILogger<SupplyController> _logger;
+        private readonly ISupplyService _supplyService;
         private readonly IProductService _productService;
 
-        public ResupplyController(ILogger<ResupplyController> logger, ILijpeVoorraadServerService voorraadService, IProductService productService)
+        public SupplyController(ILogger<SupplyController> logger, ISupplyService voorraadService, IProductService productService)
         {
-            _voorraadService = voorraadService;
+            _supplyService = voorraadService;
             _productService = productService;
             _logger = logger;
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutResupply(SupplyRequest Resupply)
+        public async Task<IActionResult> PutSupply(List<Supply> supplies)
         {
-            if (Resupply == null || Resupply.ProductsToSupply == null)
+            if (supplies == null || supplies.Count == 0)
             {
                 return new BadRequestResult();
             }
             try
             {
-                await _voorraadService.ProcessResupplyAmounts(Resupply);
-                return new OkObjectResult(Resupply);
+                await _supplyService.ProcessResupplyAmounts(supplies);
+                return new OkObjectResult(supplies);
             }
             catch (Exception)
             {
@@ -47,7 +47,7 @@ namespace Service.Controllers
         {
             try
             {
-                var supplies = await _voorraadService.GetCurrentSupplies();
+                var supplies = await _supplyService.GetCurrentSupplies();
                 return new OkObjectResult(supplies);
             }
             catch (Exception)

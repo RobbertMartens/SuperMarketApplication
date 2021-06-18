@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using Service.Interfaces;
 using Service.Repositories;
@@ -17,7 +16,7 @@ namespace Service.IntegrationTests
         protected IReceiptService ReceiptService;
         protected IRegisterService RegisterService;
         protected IProductService ProductService;
-        protected ILijpeVoorraadServerService LijpeVoorraadServerService;
+        protected ISupplyService SupplyService;
         protected IMapperService MapperService;
 
         [SetUp]
@@ -34,7 +33,7 @@ namespace Service.IntegrationTests
             serviceCollection.AddScoped<IReceiptService, ReceiptService>();
             serviceCollection.AddScoped<IRegisterService, RegisterService>();
             serviceCollection.AddScoped<IProductService, ProductService>();
-            serviceCollection.AddScoped<ILijpeVoorraadServerService, LijpeVoorraadServerService>();
+            serviceCollection.AddScoped<ISupplyService, SupplyService>();
             serviceCollection.AddScoped<IMapperService, MapperService>();
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
@@ -43,7 +42,7 @@ namespace Service.IntegrationTests
             ReceiptService = serviceProvider.GetService<IReceiptService>();
             RegisterService = serviceProvider.GetService<IRegisterService>();
             ProductService = serviceProvider.GetService<IProductService>();
-            LijpeVoorraadServerService = serviceProvider.GetService<ILijpeVoorraadServerService>();
+            SupplyService = serviceProvider.GetService<ISupplyService>();
         }
     }
 }

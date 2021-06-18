@@ -2,6 +2,7 @@
 using Service.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Service.Services
 {
@@ -71,24 +72,21 @@ namespace Service.Services
             return productReceipt;
         }
 
-        public SupplyRequest MapSupplyRequest(IEnumerable<Product> products)
+        public IEnumerable<Supply> MapSupplyRequest(IEnumerable<Product> products)
         {
             if (products == null) { throw new NullReferenceException("Received products is null"); }
 
-            var supplyRequest = new SupplyRequest
-            {
-                ProductsToSupply = new List<ProductToSupply>()
-            };
+            var supplies = new List<Supply>();
 
             foreach (var product in products)
             {
-                supplyRequest.ProductsToSupply.Add(new ProductToSupply
+                supplies.Add(new Supply
                 {
                     Amount = product.Amount,
                     Barcode = product.Barcode
                 });
             }
-            return supplyRequest;
+            return supplies;
         }
     }
 }
