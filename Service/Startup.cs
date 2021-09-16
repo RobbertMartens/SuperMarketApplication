@@ -4,9 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Service.Interfaces;
+using Service.Models;
 using Service.Repositories;
 using Service.Services;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Service
 {
@@ -51,6 +55,18 @@ namespace Service
             {
                 endpoints.MapControllers();
             });
+
+            var scope = app.ApplicationServices.CreateScope();
+            var productContext = scope.ServiceProvider.GetService<ProductContext>();
+            PopulateProductsTable(productContext);
+        }
+
+        private void PopulateProductsTable(ProductContext context)
+        {
+            var data = File.ReadAllText(Directory.GetCurrentDirectory() + "\\Repositories\\ProductData.json");
+            var products = JsonConvert.DeserializeObject<List<Product>>(data);
+            context.AddRange(products);
+            context.SaveChanges();
         }
     }
 }

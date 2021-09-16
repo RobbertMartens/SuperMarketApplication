@@ -28,7 +28,8 @@ namespace Service.IntegrationTests
             Configuration = builder.Build();
             
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddDbContext<ProductContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ProductContext")));
+            serviceCollection.AddDbContext<ProductContext>(options => 
+                options.UseSqlServer(Configuration.GetConnectionString("ProductContext")));
             serviceCollection.AddScoped<ICalculateProductPrice, CalculateProductPrice>();
             serviceCollection.AddScoped<IReceiptService, ReceiptService>();
             serviceCollection.AddScoped<IRegisterService, RegisterService>();

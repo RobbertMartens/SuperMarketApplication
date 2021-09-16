@@ -1,0 +1,79 @@
+[
+  {
+    "ProductName": "Kaas",
+    "Barcode": 156734,
+    "Price": 4.99,
+    "Discount": "NoDiscount",
+    "Amount": 65
+  },
+  {
+    "ProductName": "Ham",
+    "Barcode": 579843,
+    "Price": 1.49,
+    "Discount": "Bonus",
+    "Amount": 59
+  },
+  {
+    "ProductName": "Melk",
+    "Barcode": 378941,
+    "Price": 0.99,
+    "Discount": "Expiry",
+    "Amount": 41
+  },
+  {
+    "ProductName": "Pizza",
+    "Barcode": 739214,
+    "Price": 4.59,
+    "Discount": "NoDiscount",
+    "Amount": 85
+  },
+  {
+    "ProductName": "Bier",
+    "Barcode": 798234,
+    "Price": 11.99,
+    "Discount": "Bonus",
+    "Amount": 30
+  },
+  {
+    "ProductName": "Eieren",
+    "Barcode": 18687385,
+    "Price": 1.19,
+    "Discount": "NoDiscount",
+    "Amount": 89
+  },
+  {
+    "ProductName": "Boerenkool",
+    "Barcode": 831831,
+    "Price": 0.99,
+    "Discount": "Expiry",
+    "Amount": 66
+  },
+  {
+    "ProductName": "Flessie wijn",
+    "Barcode": 831543,
+    "Price": 3.49,
+    "Discount": "NoDiscount",
+    "Amount": 15
+  },
+  {
+    "ProductName": "Haribo snoepies",
+    "Barcode": 81681385,
+    "Price": 1.49,
+    "Discount": "NoDiscount",
+    "Amount": 28
+  },
+  {
+    "ProductName": "Andijvie",
+    "Barcode": 841531,
+    "Price": 0.95,
+    "Discount": "Bonus",
+    "Amount": 150
+  },
+  {
+    "ProductName": "Bananen",
+    "Barcode": 23564234,
+    "Price": 1.99,
+    "Discount": "Bonus",
+    "Amount": 47
+  }
+]
